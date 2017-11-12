@@ -1,9 +1,4 @@
-var express = require('express');
-var msg = require("./mod_test");
-
-var app = express();
-
-app.set('view engine', 'ejs');
+var app = require('./config/server');
 
 app.get('/', function(req, res){
 	res.render("home/index");
@@ -23,5 +18,5 @@ app.get('/tecno', function(req, res){
 
 app.listen(3000, function(){
 	//executing msg function
-	console.log(msg());
+	console.log('teste');
 });
