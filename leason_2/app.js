@@ -1,22 +1,13 @@
 var app = require('./config/server');
 
-app.get('/', function(req, res){
-	res.render("home/index");
-});
+var rotaNoticias = require('./app/routes/add_noticia');
+rotaNoticias(app);
 
-app.get('/form_add', function(req, res){
-	res.render("admin/form_add_noticia");
-});
+var rotaHome = require('./app/routes/home')(app);
 
-app.get('/noticias', function(req, res){
-	res.render("noticias/noticias");
-});
-
-app.get('/tecno', function(req, res){
-	res.render("session/tecno");
-});
+//seting all routes on one file
+var routes = require('./app/routes/routes')(app);
 
 app.listen(3000, function(){
-	//executing msg function
-	console.log('teste');
+	console.log('server ON');
 });
