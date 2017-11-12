@@ -1,11 +1,11 @@
 var app = require('./config/server');
 
-var rotaNoticias = require('./app/routes/add_noticia');
-rotaNoticias(app);
+//var rotaNoticias = require('./app/routes/add_noticia');
+//rotaNoticias(app);
 
-var rotaHome = require('./app/routes/home')(app);
+//var rotaHome = require('./app/routes/home')(app);
 
-var rotaNoticias = require('./app/routes/noticias')(app);
+//var rotaNoticias = require('./app/routes/noticias')(app);
 
 //seting all routes on one file
 //var routes = require('./app/routes/routes')(app);
