@@ -1,4 +1,6 @@
 var express = require('express');
+var msg = require("./mod_test");
+
 var app = express();
 
 app.set('view engine', 'ejs');
@@ -20,5 +22,6 @@ app.get('/tecno', function(req, res){
 });
 
 app.listen(3000, function(){
-	console.log('servidor com express');
+	//executing msg function
+	console.log(msg());
 });
