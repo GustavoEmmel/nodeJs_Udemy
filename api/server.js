@@ -68,7 +68,7 @@ app.get('/api/:id', function(req, res){
 				if(err){
 					res.json(err);
 				} else {
-					res.json(results);
+					res.status(200).json({status: 1});
 				}
 				mongoclient.close();
 			});
@@ -104,12 +104,13 @@ app.delete('/api/:id', function(req, res){
 	db.open( function(err, mongoclient){
 		mongoclient.collection('postagens', function(err, collection){
 			collection.remove( {_id: objectId(req.params.id) }, function(err, records) {
+
 				if(err){
-				res.json(err);
-				} else {
-					res.json(records);
-				}
-				mongoclient.close();
+					res.json(err);
+					} else {
+						res.json(records);
+					}
+					mongoclient.close();
 			} );
 		});
 	});
