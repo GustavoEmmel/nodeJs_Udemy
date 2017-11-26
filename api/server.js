@@ -2,11 +2,17 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongodb = require('mongodb');
 var objectId = require('mongodb').ObjectId;
+var multiparty = require('connect-multiparty');
+var fs = require('fs');
 
 var app = express();
 
+// this is to get info as x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+// this is to receive form with multipart/files
+app.use(multiparty());
 
 var port = 8080;
 app.listen(port);
@@ -26,20 +32,44 @@ app.get('/', function(req, res) {
 
 //POST(insert)
 app.post('/api', function(req, res){
-	var bodyData = req.body;
-	db.open( function(err, mongoclient){
-		mongoclient.collection('postagens', function(err, collection){
-			collection.insert(bodyData, function(err, records){
+	
+	res.setHeader("Access-Control-Allow-Origin","*");
 
-				if(err){
-					res.json({status: 'fail'});
-				} else {
-					res.json({status: 'success'});
-				}
-				mongoclient.close();
-			});
-		});
+	var date = new Date();
+	var timeStamp = date.getTime();
+
+	var fileName = timeStamp + '_' + req.files.url_image.originalFilename;
+
+	var tempPath = req.files.url_image.path;
+	var newPath = './uploads/' + fileName;
+
+	fs.rename(tempPath, newPath, function(err){
+		if(err){
+			res.status(500).json({error: err});
+		} else {
+
+			var data = {
+				url_image: fileName,
+				title: req.body.title
+			}
+
+			db.open( function(err, mongoclient){
+				mongoclient.collection('postagens', function(err, collection){
+					collection.insert(data, function(err, records){
+
+						if(err){
+							res.json({status: 'fail'});
+						} else {
+							res.json({status: 'success'});
+						}
+						mongoclient.close();
+					});
+				});
+			});		
+		}
+
 	});
+
 });
 
 
@@ -106,11 +136,11 @@ app.delete('/api/:id', function(req, res){
 			collection.remove( {_id: objectId(req.params.id) }, function(err, records) {
 
 				if(err){
-					res.json(err);
-					} else {
-						res.json(records);
-					}
-					mongoclient.close();
+				res.json(err);
+				} else {
+					res.json(records);
+				}
+				mongoclient.close();
 			} );
 		});
 	});

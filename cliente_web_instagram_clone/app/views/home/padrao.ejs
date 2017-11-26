@@ -28,6 +28,30 @@
 					return false;
 				});
 
+				$('#btn-publicar').click(function(){
+
+					var formData = new FormData();
+
+					var file = document.getElementById("arquivo").files['0'];
+					var title = document.getElementById("titulo").value;
+
+					formData.append("url_image", file);
+					formData.append("title", title);
+
+					var xhr = new XMLHttpRequest();
+
+					xhr.onreadystatechange = function(){
+						if(xhr.readyState == 4){
+							var resposta = xhr.responseText;
+							document.getElementById('mensagem').innerHTML = resposta;
+						}
+					}
+
+					xhr.open("POST", "http://localhost:8080/api");
+					xhr.send(formData);
+
+				});
+
 			});
 		</script>
 
